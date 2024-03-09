@@ -95,9 +95,7 @@ output:
   - id: green_led_output
     platform: gpio
     pin: GPIO2
-  - id: red_led_output
-    platform: gpio
-    pin: GPIO3
+
 rtttl:
  output: buzzer
 
@@ -204,16 +202,19 @@ switch:
     name: "Power Control"
     id: power_control
     pin: GPIO5
+  - platform: gpio
+    pin:
+      number: GPIO3  #Change the pin num to what you used
+      mode:
+        output: true
+    name: LD012 Sensitivity Adjust
   
 light:
   - platform: binary
     id: green_led
     name: "Green LED"
     output: green_led_output
-  - platform: binary
-    id: red_led
-    name: "Red LED"
-    output: red_led_output
+
 
 
 #Used To Control RGB Light On Startup. Tells User Status Of Device
