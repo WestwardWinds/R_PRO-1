@@ -12,11 +12,7 @@ esphome:
   platformio_options:
     board_build.flash_mode: dio
 
-  on_boot:
-  - priority: 900.0
-    then:
-      - lambda: |-
-          id(cpu_speed) = ESP.getCpuFreqMHz();
+
 
   project:
     name: "ApolloAutomation.R-1"
@@ -52,10 +48,6 @@ globals:
 # Enable Home Assistant API
 # Also Add Buzzer Service Connection
 api:
-  on_client_connected:
-    - delay: 1s
-    - light.turn_off: green_led
-    - lambda: 'id(cycleCounter) = 30;'
   services:
     - service: play_buzzer
       variables:
@@ -85,6 +77,10 @@ improv_serial:
 web_server:
   port: 80
 
+#TODO: Prevent Deep Sleep Until Connected To HA (Or set period of time)
+#TODO: Switch to control deep sleep
+
+
 
 
 # Buzzer
@@ -92,13 +88,23 @@ output:
   - platform: ledc
     pin: GPIO10
     id: buzzer
-  - id: green_led_output
+  - id: red_led_output
     platform: gpio
-    pin: GPIO2
-
+    pin: GPIO3
 rtttl:
  output: buzzer
 
+deep_sleep:
+  run_duration:
+    default: 30s
+    gpio_wakeup_reason: 30s
+  sleep_duration: 24h
+  wakeup_pin:
+    number: GPIO2
+    mode: INPUT_PULLUP
+    inverted: false
+  id: deep_sleep_1
+  wakeup_pin_mode: KEEP_AWAKE
 
 
 binary_sensor:
@@ -109,12 +115,11 @@ binary_sensor:
   - platform: gpio
     pin:
       number: GPIO6
-      mode:
-        input: true
-    name: LD012 Radar
+    name: "Presence Detected"
     device_class: occupancy
+    # Assuming the sensor pulls the pin HIGH when motion is detected; adjust if necessary
     filters:
-      - delayed_on: 100ms
+      - delayed_on: 10ms  # Debounce filter to prevent false positives
       - delayed_off: 5s
   
   - platform: gpio
@@ -202,46 +207,48 @@ switch:
     name: "Power Control"
     id: power_control
     pin: GPIO5
-  - platform: gpio
-    pin:
-      number: GPIO3  #Change the pin num to what you used
-      mode:
-        output: true
-    name: LD012 Sensitivity Adjust
+
+# TODO ADD CONTROL FOR SENSITIVITY ADJUST
+#  - platform: gpio
+#    pin:
+#      number: GPIO3
+#      mode:
+#        output: true
+#    name: LD012 Sensitivity Adjust
   
 light:
   - platform: binary
-    id: green_led
-    name: "Green LED"
-    output: green_led_output
+    id: red_led
+    name: "Red LED"
+    output: red_led_output
+number:
+  - platform: template
+    name: Run Duration
+    id: run_duration
+    restore_value: true
+    initial_value: 10
+    min_value: 1.0
+    max_value: 10000.0
+    entity_category: "CONFIG"
+    unit_of_measurement: seconds
+    optimistic: true
+    update_interval: never
+    step: 0.1
+    mode: box
+
+        
+  - platform: template
+    name: Sleep Duration
+    id: sleep_duration
+    restore_value: true
+    initial_value: 30
+    min_value: 1.0
+    max_value: 10000.0
+    entity_category: "CONFIG"
+    unit_of_measurement: seconds
+    optimistic: true
+    update_interval: never
+    step: 0.1
+    mode: box
 
 
-
-#Used To Control RGB Light On Startup. Tells User Status Of Device
-interval:
-  - interval: 1s
-    then:
-      - if:
-          condition:
-            - binary_sensor.is_off: ink_ha_connected
-            - lambda: 'return id(cycleCounter) < 30;'
-            - switch.is_on: startup_light_blink
-
-          then:
-            - light.toggle:
-                id: green_led
-            - lambda: 'id(cycleCounter) += 1;'
-
-  - interval: 1s
-    then:
-      - if:
-          condition:
-            - binary_sensor.is_off: ink_ha_connected
-            - lambda: 'return id(cycleCounter) > 30;'
-            - lambda: 'return id(cycleCounter) < 31;'
-            - switch.is_on: startup_light_blink
-
-          then:
-            - light.turn_off:
-                id: green_led
-            - lambda: 'id(cycleCounter) += 1;'
