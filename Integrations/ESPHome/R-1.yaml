@@ -24,7 +24,7 @@ esphome:
 esp32:
   board: esp32-c3-devkitm-1
   framework:
-    type: arduino
+    type: esp-idf
   
 dashboard_import:
   package_import_url: github://ApolloAutomation/R-1/Integrations/ESPHome/R-1.yaml
@@ -56,15 +56,11 @@ api:
         - rtttl.play:
             rtttl: !lambda 'return song_str;'
 
-logger:
 
 ota:
-  password: "apolloautomation"
-  safe_mode: false
 
 wifi:
-
-  power_save_mode: HIGH
+  power_save_mode: none
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
@@ -72,14 +68,10 @@ wifi:
 
 captive_portal:
 
-improv_serial:
-
-web_server:
-  port: 80
 
 #TODO: Prevent Deep Sleep Until Connected To HA (Or set period of time)
 #TODO: Switch to control deep sleep
-
+#TODO: Add MAX17048G Fuel Gauge & Control Hibernate State
 
 
 
@@ -100,9 +92,10 @@ deep_sleep:
     gpio_wakeup_reason: 30s
   sleep_duration: 24h
   wakeup_pin:
-    number: GPIO2
+    number: GPIO4
     mode: INPUT_PULLUP
     inverted: false
+    allow_other_uses: true
   id: deep_sleep_1
   wakeup_pin_mode: KEEP_AWAKE
 
@@ -114,7 +107,8 @@ binary_sensor:
 
   - platform: gpio
     pin:
-      number: GPIO6
+      number: GPIO4
+      allow_other_uses: true
     name: "Presence Detected"
     device_class: occupancy
     # Assuming the sensor pulls the pin HIGH when motion is detected; adjust if necessary
@@ -203,18 +197,7 @@ switch:
   - platform: factory_reset
     id: factory_reset_switch
     internal: true
-  - platform: gpio
-    name: "Power Control"
-    id: power_control
-    pin: GPIO5
 
-# TODO ADD CONTROL FOR SENSITIVITY ADJUST
-#  - platform: gpio
-#    pin:
-#      number: GPIO3
-#      mode:
-#        output: true
-#    name: LD012 Sensitivity Adjust
   
 light:
   - platform: binary
@@ -241,11 +224,11 @@ number:
     name: Sleep Duration
     id: sleep_duration
     restore_value: true
-    initial_value: 30
+    initial_value: 480
     min_value: 1.0
     max_value: 10000.0
     entity_category: "CONFIG"
-    unit_of_measurement: seconds
+    unit_of_measurement: minutes
     optimistic: true
     update_interval: never
     step: 0.1
