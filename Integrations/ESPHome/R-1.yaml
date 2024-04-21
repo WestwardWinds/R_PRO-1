@@ -12,8 +12,6 @@ esphome:
   platformio_options:
     board_build.flash_mode: dio
 
-
-
   project:
     name: "ApolloAutomation.R-1"
     version: "${version}"
@@ -36,14 +34,18 @@ globals:
     type: int
     restore_value: no
     initial_value: "0"
-  - id: cycleCounter
-    type: int
-    restore_value: no
-    initial_value: '0'
   - id: button_press_timestamp
     restore_value: no
     type: uint32_t
     initial_value: '0'
+  - id: alarm_cycle
+    restore_value: no
+    type: int
+    initial_value: "0"
+  - id: alarm_string_value
+    type: std::string
+    restore_value: yes
+    initial_value: '"ApolloAlarm:d=8,o=5,b=180:c,d,e,c,d,e,c,d,e,c,d,e,c,d,e,c,d,e,c,d,e;"'
 
 # Enable Home Assistant API
 # Also Add Buzzer Service Connection
@@ -70,7 +72,6 @@ captive_portal:
 
 
 #TODO: Prevent Deep Sleep Until Connected To HA (Or set period of time)
-#TODO: Switch to control deep sleep
 #TODO: Add MAX17048G Fuel Gauge & Control Hibernate State
 
 
@@ -88,15 +89,15 @@ rtttl:
 
 deep_sleep:
   run_duration:
-    default: 30s
-    gpio_wakeup_reason: 30s
+    default: 15s
+    gpio_wakeup_reason: 15s
   sleep_duration: 24h
   wakeup_pin:
     number: GPIO4
     mode: INPUT_PULLUP
     inverted: false
     allow_other_uses: true
-  id: deep_sleep_1
+  id: deepSleep
   wakeup_pin_mode: KEEP_AWAKE
 
 
@@ -110,11 +111,20 @@ binary_sensor:
       number: GPIO4
       allow_other_uses: true
     name: "Presence Detected"
+    id: presenceDetected
     device_class: occupancy
-    # Assuming the sensor pulls the pin HIGH when motion is detected; adjust if necessary
     filters:
       - delayed_on: 10ms  # Debounce filter to prevent false positives
       - delayed_off: 5s
+    on_state:
+      then:
+        - if:
+            condition:
+              - binary_sensor.is_on: presenceDetected
+              - switch.is_on: alarm_switch
+
+            then:
+              - script.execute: sound_alarm
   
   - platform: gpio
     pin: 
@@ -186,17 +196,16 @@ button:
 
 
 switch:
-  - platform: template
-    name: "Startup Light Blink"
-    id: startup_light_blink
-    icon: mdi:lightbulb
-    restore_mode: RESTORE_DEFAULT_ON
-    optimistic: true
-    entity_category: "config"
-
   - platform: factory_reset
     id: factory_reset_switch
     internal: true
+  - platform: template
+    name: "Alarm"
+    id: alarm_switch
+    icon: mdi:siren
+    restore_mode: RESTORE_DEFAULT_OFF
+    entity_category: "config"
+    optimistic: true
 
   
 light:
@@ -204,34 +213,33 @@ light:
     id: red_led
     name: "Red LED"
     output: red_led_output
-number:
+
+text_sensor:
   - platform: template
-    name: Run Duration
-    id: run_duration
-    restore_value: true
-    initial_value: 10
-    min_value: 1.0
-    max_value: 10000.0
-    entity_category: "CONFIG"
-    unit_of_measurement: seconds
-    optimistic: true
-    update_interval: never
-    step: 0.1
-    mode: box
-
-        
-  - platform: template
-    name: Sleep Duration
-    id: sleep_duration
-    restore_value: true
-    initial_value: 480
-    min_value: 1.0
-    max_value: 10000.0
-    entity_category: "CONFIG"
-    unit_of_measurement: minutes
-    optimistic: true
-    update_interval: never
-    step: 0.1
-    mode: box
-
-
+    name: "Alarm String"
+    id: alarm_string
+    icon: mdi:note
+    lambda: |-
+      return id(alarm_string_value);
+    entity_category: "config"
+    on_value:
+      then:
+        - lambda: id(alarm_string_value) = x;
+    
+script:
+  - id: sound_alarm
+    then:
+      - while:
+          condition:
+            # Presence Detected
+            - binary_sensor.is_on: presenceDetected
+            # Alarm is on
+            - switch.is_on: alarm_switch
+            - lambda: |-
+                return id(alarm_cycle) < 3;
+          then:
+            - rtttl.play: "return id(alarm_string_value).state"
+            - lambda: "id(alarm_cycle) += 1;"
+            - delay: 1s
+            
+      
