@@ -17,6 +17,15 @@ esphome:
     version: "${version}"
 
   min_version: 2024.2.0
+  on_boot:
+    priority: 500
+    then:
+      - delay: 30s
+      - if:
+          condition:
+            binary_sensor.is_off: ink_ha_connected
+          then:
+            - deep_sleep.enter: deep_sleep_1
 
 # Define Board
 esp32:
@@ -24,10 +33,12 @@ esp32:
   framework:
     type: esp-idf
   
-dashboard_import:
-  package_import_url: github://ApolloAutomation/R-1/Integrations/ESPHome/R-1.yaml
-  import_full_config: false
+external_components:
+  - source: github://Option-Zero/esphome-components
+    components: [max17048]
 
+logger:
+  level: NONE
 
 globals:
   - id: cpu_speed
@@ -47,34 +58,39 @@ globals:
     restore_value: yes
     initial_value: '"ApolloAlarm:d=8,o=5,b=180:c,d,e,c,d,e,c,d,e,c,d,e,c,d,e,c,d,e,c,d,e;"'
 
-# Enable Home Assistant API
-# Also Add Buzzer Service Connection
-api:
-  services:
-    - service: play_buzzer
-      variables:
-        song_str: string
-      then:
-        - rtttl.play:
-            rtttl: !lambda 'return song_str;'
-
 
 ota:
 
 wifi:
   power_save_mode: none
-
-  # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
     ssid: "Apollo R1 Hotspot"
+
+mqtt:
+  id: mqtt_connection
+  broker: 10.69.3.113
+  username: HA-MQTT
+  password: "ZsHzZ@L37AkkhXyLQZ74GdWKGF_zfC"
+  birth_message:
+  will_message:
+  on_message:
+    # Prevent deep sleep for OTA
+    - topic: apollo/ota_mode
+      payload: 'ON'
+      then:
+        - deep_sleep.prevent: deep_sleep_1
+    - topic: apollo/sleep
+      payload: 'ON'
+      then:
+        - deep_sleep.enter: deep_sleep_1
 
 captive_portal:
 
 
-#TODO: Prevent Deep Sleep Until Connected To HA (Or set period of time)
-#TODO: Add MAX17048G Fuel Gauge & Control Hibernate State
-
-
+i2c:
+  sda: GPIO1
+  scl: GPIO0
+  id: bus_a
 
 # Buzzer
 output:
@@ -97,7 +113,7 @@ deep_sleep:
     mode: INPUT_PULLUP
     inverted: false
     allow_other_uses: true
-  id: deepSleep
+  id: deep_sleep_1
   wakeup_pin_mode: KEEP_AWAKE
 
 
@@ -162,7 +178,6 @@ sensor:
     name: "ESP Temperature"
     id: sys_esp_temperature
 
-
   - platform: uptime
     name: Uptime
     id: sys_uptime
@@ -182,6 +197,14 @@ sensor:
     id: wifi_signal_db
     update_interval: 60s
     entity_category: "diagnostic"
+
+  - platform: max17048
+    battery_voltage:
+      name: Battery voltage
+    battery_level:
+      name: Battery level
+    rate:
+      name: Battery discharge rate
     
 
 button:
@@ -238,7 +261,7 @@ script:
             - lambda: |-
                 return id(alarm_cycle) < 3;
           then:
-            - rtttl.play: "return id(alarm_string_value).state"
+            - rtttl.play: !lambda 'return id(alarm_string_value).c_str();'
             - lambda: "id(alarm_cycle) += 1;"
             - delay: 1s
             
