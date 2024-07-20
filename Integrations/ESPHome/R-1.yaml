@@ -99,7 +99,7 @@ output:
     id: buzzer
   - id: red_led_output
     platform: gpio
-    pin: GPIO3
+    pin: GPIO2
 rtttl:
  output: buzzer
 
@@ -109,10 +109,9 @@ deep_sleep:
     gpio_wakeup_reason: 15s
   sleep_duration: 24h
   wakeup_pin:
-    number: GPIO4
+    number: GPIO3
     mode: INPUT_PULLUP
     inverted: false
-    allow_other_uses: true
   id: deep_sleep_1
   wakeup_pin_mode: KEEP_AWAKE
 
@@ -125,7 +124,6 @@ binary_sensor:
   - platform: gpio
     pin:
       number: GPIO4
-      allow_other_uses: true
     name: "Presence Detected"
     id: presenceDetected
     device_class: occupancy
