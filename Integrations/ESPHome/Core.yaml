@@ -1,0 +1,103 @@
+substitutions:
+  version: "25.3.26.1"
+
+esp32:
+  board: esp32-s3-devkitc-1
+  variant: esp32s3
+  framework:
+    type: esp-idf
+
+external_components:
+  - source:
+      type: git
+      url: https://github.com/Rihan9/LD2412
+      ref: main
+    components: [LD2412]
+api:
+  services:
+    - service: play_buzzer
+      variables:
+        song_str: string
+      then:
+        - rtttl.play:
+            rtttl: !lambda 'return song_str;'
+rtttl:
+ output: buzzer
+globals:
+  - id: cycleCounter
+    type: int
+    restore_value: no
+    initial_value: '0'
+  - id: button_press_timestamp
+    restore_value: no
+    type: uint32_t
+    initial_value: '0'
+
+web_server:  
+  port: 80
+
+uart:
+  - id: uart_bus
+    tx_pin:
+      number: GPIO43
+      mode:
+        input: true
+        pullup: true
+    rx_pin:
+      number: GPIO44
+      mode:
+        input: true
+        pullup: true
+    baud_rate: 115200
+    parity: NONE
+
+output:
+  - platform: ledc
+    pin: GPIO8
+    id: buzzer
+
+LD2412:
+  id: ld2412
+  throttle: 1s
+  uart_id: uart_bus
+
+binary_sensor:
+  - platform: LD2412
+    has_target:
+      name: Presence
+    has_moving_target:
+      name: Moving Target
+    has_still_target:
+      name: Still Target
+
+sensor:
+  - platform: internal_temperature
+    name: "ESP Temperature"
+    id: sys_esp_temperature
+    disabled_by_default: true
+
+  - platform: uptime
+    name: Uptime
+    id: sys_uptime
+    update_interval: 60s
+
+select:
+  - platform: LD2412
+    out_pin_level:
+      name: 'Hardware output pin level'
+    distance_resolution:
+      name: 'Distance resolution'
+    baud_rate:
+      name: "baud rate"
+      on_value:
+        - delay: 3s
+        - lambda: |-
+            id(uart_bus).flush();
+            uint32_t new_baud_rate = stoi(x);
+            ESP_LOGD("change_baud_rate", "Changing baud rate from %i to %i",id(uart_bus).get_baud_rate(), new_baud_rate);
+            if (id(uart_bus).get_baud_rate() != new_baud_rate) {
+            id(uart_bus).set_baud_rate(new_baud_rate);
+            id(uart_bus).load_settings();
+            }
+    mode:
+      name: "Mode"
