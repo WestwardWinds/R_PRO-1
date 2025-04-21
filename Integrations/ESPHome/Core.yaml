@@ -402,6 +402,7 @@ select:
       disabled_by_default: true
     baud_rate:
       name: "baud rate"
+      disabled_by_default: true
       on_value:
         - delay: 3s
         - lambda: |-
