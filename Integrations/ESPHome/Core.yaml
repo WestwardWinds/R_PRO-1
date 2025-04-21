@@ -324,6 +324,7 @@ sensor:
       name: LD2412 Still Energy
     detection_distance:
       name: LD2412 Detection Distance
+      disabled_by_default: true
     g0:
       move_energy:
         name: LD2412 g00 move energy
