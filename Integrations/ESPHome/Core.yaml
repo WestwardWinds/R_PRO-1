@@ -78,8 +78,6 @@ button:
       name: "LD2450 Factory Reset"
     restart:
       name: "LD2450 Restart"
-    query_params:
-      name: LD2450 Query params
 
 number:
   - platform: ld2450
