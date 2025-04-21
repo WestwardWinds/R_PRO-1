@@ -436,8 +436,6 @@ switch:
   - platform: LD2412
     bluetooth:
       name: "LD2412 Bluetooth"
-    engineering_mode:
-      name: "Radar Engineering Mode"
 text_sensor:
   - platform: ld2450
     ld2450_id: ld2450_radar
