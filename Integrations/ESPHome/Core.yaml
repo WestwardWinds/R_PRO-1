@@ -434,7 +434,6 @@ switch:
     bluetooth:
       name: "Bluetooth"
 
-
 text_sensor:
   - platform: ld2450
     ld2450_id: ld2450_radar
@@ -456,3 +455,26 @@ text_sensor:
       name: "firmware version"
     mac_address:
       name: "mac address"
+
+light:
+  - platform: esp32_rmt_led_strip
+    id: rgb_light
+    name: "RGB Light"
+    pin: GPIO4
+    default_transition_length: 0s
+    chipset: WS2812
+    num_leds: 4
+    rgb_order: grb
+    effects:
+      - pulse:
+          name: "Slow Pulse"
+          transition_length: 1000ms
+          update_interval: 1000ms
+          min_brightness: 50%
+          max_brightness: 100%
+      - pulse:
+          name: "Fast Pulse"
+          transition_length: 100ms
+          update_interval: 100ms
+          min_brightness: 50%
+          max_brightness: 100%
