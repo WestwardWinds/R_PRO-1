@@ -259,8 +259,8 @@ sensor:
       distance:
         name: Target-1 Distance
       resolution:
-      disabled_by_default: true
         name: Target-1 Resolution
+        disabled_by_default: true
     target_2:
       x:
         name: Target-2 X
@@ -273,8 +273,8 @@ sensor:
       distance:
         name: Target-2 Distance
       resolution:
-      disabled_by_default: true
         name: Target-2 Resolution
+        disabled_by_default: true
     target_3:
       x:
         name: Target-3 X
@@ -287,8 +287,8 @@ sensor:
       distance:
         name: Target-3 Distance
       resolution:
-      disabled_by_default: true
         name: Target-3 Resolution
+        disabled_by_default: true
     zone_1:
       target_count:
         name: Zone-1 All Target Count
@@ -398,8 +398,8 @@ select:
     out_pin_level:
       name: 'Hardware output pin level'
     distance_resolution:
-    disabled_by_default: true
       name: 'Distance resolution'
+      disabled_by_default: true
     baud_rate:
       name: "baud rate"
       on_value:
@@ -417,7 +417,6 @@ select:
   - platform: ld2450
     ld2450_id: ld2450_radar
     baud_rate:
-    disabled_by_default: true
       name: "Baud rate"
       disabled_by_default: true
     zone_type:
