@@ -67,17 +67,25 @@ ld2450:
 button:
   - platform: LD2412
     factory_reset:
-      name: "LD2412 factory reset"
+      name: "LD2412 Factory Reset"
     restart:
-      name: "LD2412 restart"
+      name: "LD2412 Restart"
     query_params:
-      name: query params
+      name: LD2412 Query params
+  - platform: ld2450
+    ld2450_id: ld2450_radar
+    factory_reset:
+      name: "LD2450 Factory Reset"
+    restart:
+      name: "LD2450 Restart"
+    query_params:
+      name: LD2450 Query params
 
 number:
   - platform: ld2450
     ld2450_id: ld2450_radar
     presence_timeout:
-      name: "Timeout"
+      name: "LD2450 Timeout"
     zone_1:
       x1:
         name: LD2450 Zone-1 X1
@@ -108,7 +116,7 @@ number:
 
   - platform: LD2412
     timeout:
-      name: "LD2412 presence holding"
+      name: "LD2412 Timeout"
     min_distance_gate:
       name: "LD2412 min distance gate"
     max_distance_gate:
@@ -135,7 +143,7 @@ number:
         name: LD2412 g03 still threshold
     g4:
       move_threshold:
-        name: LD2412  g04 move threshold
+        name: LD2412 g04 move threshold
       still_threshold:
         name: LD2412 g04 still threshold
     g5:
@@ -455,10 +463,10 @@ text_sensor:
         name: "LD2450 Target-2 Direction"
     target_3:
       direction:
-        name: "TLD2450 arget-3 Direction"
+        name: "LD2450 Target-3 Direction"
   - platform: LD2412
     version:
-      name: "LD2412 firmware version"
+      name: "LD2412 Firmware"
     mac_address:
       name: "LD2412 BT MAC"
 
