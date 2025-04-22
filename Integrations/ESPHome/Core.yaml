@@ -318,6 +318,8 @@ sensor:
         name: LD2450 Zone-3 Moving Target Count
 
   - platform: LD2412
+    light:
+      name: LD2412 light
     moving_distance:
       name : LD2412 Moving Distance
       disabled_by_default: true
@@ -424,7 +426,7 @@ select:
             id(uart_bus).load_settings();
             }
     mode:
-      name: "Mode"
+      name: "LD2412 Mode"
   - platform: ld2450
     ld2450_id: ld2450_radar
     baud_rate:
