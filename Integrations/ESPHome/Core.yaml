@@ -1,5 +1,5 @@
 substitutions:
-  version: "25.4.21.1"
+  version: "25.4.22.1"
 
 esp32:
   board: esp32-s3-devkitc-1
@@ -319,7 +319,7 @@ sensor:
 
   - platform: LD2412
     light:
-      name: LD2412 light
+      name: LD2412 LUX
     moving_distance:
       name : LD2412 Moving Distance
       disabled_by_default: true
@@ -444,7 +444,7 @@ switch:
     bluetooth:
       name: "LD2450 Bluetooth"
     multi_target:
-      name: "Multi Target Tracking"
+      name: "LD2450 Multi Target Tracking"
   - platform: LD2412
     bluetooth:
       name: "LD2412 Bluetooth"
