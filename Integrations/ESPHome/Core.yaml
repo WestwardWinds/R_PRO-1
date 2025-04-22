@@ -469,6 +469,13 @@ text_sensor:
       name: "LD2412 Firmware"
     mac_address:
       name: "LD2412 BT MAC"
+  - platform: template
+    name: "Reduce DB Reporting"
+    id: reduce_db_reporting
+    icon: mdi:database
+    restore_mode: RESTORE_DEFAULT_OFF
+    optimistic: true
+    entity_category: "config"
 
 light:
   - platform: esp32_rmt_led_strip
