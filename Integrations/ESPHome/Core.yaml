@@ -328,8 +328,10 @@ sensor:
       disabled_by_default: true
     moving_energy:
       name: LD2412 Move Energy
+      disabled_by_default: true
     still_energy:
       name: LD2412 Still Energy
+      disabled_by_default: true
     detection_distance:
       name: LD2412 Detection Distance
       disabled_by_default: true
@@ -445,6 +447,7 @@ switch:
       name: "LD2450 Bluetooth"
     multi_target:
       name: "LD2450 Multi Target Tracking"
+      disabled_by_default: true
   - platform: LD2412
     bluetooth:
       name: "LD2412 Bluetooth"
