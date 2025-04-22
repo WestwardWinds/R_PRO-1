@@ -448,6 +448,14 @@ switch:
   - platform: LD2412
     bluetooth:
       name: "LD2412 Bluetooth"
+  - platform: template
+    name: "Reduce DB Reporting"
+    id: reduce_db_reporting
+    icon: mdi:database
+    restore_mode: RESTORE_DEFAULT_OFF
+    optimistic: true
+    entity_category: "config"
+
 text_sensor:
   - platform: ld2450
     ld2450_id: ld2450_radar
@@ -469,13 +477,10 @@ text_sensor:
       name: "LD2412 Firmware"
     mac_address:
       name: "LD2412 BT MAC"
-  - platform: template
-    name: "Reduce DB Reporting"
-    id: reduce_db_reporting
-    icon: mdi:database
-    restore_mode: RESTORE_DEFAULT_OFF
-    optimistic: true
-    entity_category: "config"
+  - platform: wifi_info
+    ip_address:
+      name: "IP Address"
+      icon: "mdi:ip-outline"
 
 light:
   - platform: esp32_rmt_led_strip
