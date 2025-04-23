@@ -238,11 +238,7 @@ sensor:
     name: Uptime
     id: sys_uptime
     update_interval: 60s
-  - platform: wifi_signal
-    name: RSSI
-    id: wifi_signal_db
-    update_interval: 60s
-    entity_category: "diagnostic"
+
 
   - platform: ld2450
     ld2450_id: ld2450_radar
@@ -480,10 +476,7 @@ text_sensor:
       name: "LD2412 Firmware"
     mac_address:
       name: "LD2412 BT MAC"
-  - platform: wifi_info
-    ip_address:
-      name: "IP Address"
-      icon: "mdi:ip-outline"
+
 
 light:
   - platform: esp32_rmt_led_strip
