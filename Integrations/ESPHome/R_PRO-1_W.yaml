@@ -1,0 +1,60 @@
+
+esphome:
+  name: "apollo-r-pro-1-w"
+  friendly_name: Apollo R_PRO-1
+  comment: Apollo R_PRO-1
+  name_add_mac_suffix: true
+  platformio_options:
+    board_build.flash_mode: dio
+
+  project:
+    name: "ApolloAutomation.R-PRO-1-W"
+    version: "25.3.27"
+
+  min_version: 2024.6.4
+  
+dashboard_import:
+  package_import_url: github://ApolloAutomation/R-1/Integrations/ESPHome/R_PRO-1_W.yaml
+  import_full_config: false
+
+ota:
+  - platform: esphome
+    id: ota_esphome
+  - platform: http_request
+    id: ota_managed
+
+http_request:
+  verify_ssl: true
+
+safe_mode:
+
+improv_serial:
+
+esp32_improv:
+  authorizer: none
+
+web_server:
+  port: 80
+
+update:
+  - platform: http_request
+    id: update_http_request
+    name: Firmware Update
+    source: https://apolloautomation.github.io/R_PRO-1/firmware-w/manifest.json
+
+logger:
+
+wifi:
+  id: wifi_1
+  on_connect:
+    - delay: 5s
+    - ble.disable:
+  on_disconnect:
+    - ble.enable:
+  ap:
+    ssid: "Apollo R PRO 1 Hotspot"
+
+captive_portal:
+
+packages:
+  core: !include Core.yaml
