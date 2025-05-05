@@ -1,20 +1,20 @@
 
 esphome:
-  name: "apollo-r-1-eth"
-  friendly_name: Apollo R-1
-  comment: Apollo R-1
+  name: "apollo-r-pro-1-eth"
+  friendly_name: Apollo R_PRO-1
+  comment: Apollo R_PRO-1
   name_add_mac_suffix: true
   platformio_options:
     board_build.flash_mode: dio
 
   project:
-    name: "ApolloAutomation.R-1-ETH"
+    name: "ApolloAutomation.R-PRO-1-ETH"
     version: "25.3.27"
 
   min_version: 2024.6.4
   
 dashboard_import:
-  package_import_url: github://ApolloAutomation/R-1/Integrations/ESPHome/R-1_ETH.yaml
+  package_import_url: github://ApolloAutomation/R_PRO-1/Integrations/ESPHome/R_PRO-1_ETH.yaml
   import_full_config: false
 
 ota:
@@ -32,7 +32,7 @@ update:
   - platform: http_request
     id: update_http_request
     name: Firmware Update
-    source: https://apolloautomation.github.io/R-1/firmware-e/manifest.json
+    source: https://apolloautomation.github.io/R_PRO-1/firmware-e/manifest.json
 
 logger:
 
