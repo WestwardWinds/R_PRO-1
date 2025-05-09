@@ -1,5 +1,5 @@
 substitutions:
-  version: "25.4.22.1"
+  version: "25.5.9.1"
 
 esp32:
   board: esp32-s3-devkitc-1
@@ -10,7 +10,7 @@ esp32:
 external_components:
   - source:
       type: git
-      url: https://github.com/Rihan9/LD2412
+      url: https://github.com/ApolloAutomation/LD2412
       ref: main
     components: [LD2412]
 api:
@@ -22,6 +22,7 @@ api:
         - rtttl.play:
             rtttl: !lambda 'return song_str;'
 rtttl:
+ id: rtttl_player
  output: buzzer
 globals:
   - id: cycleCounter
@@ -35,6 +36,11 @@ globals:
 
 web_server:  
   port: 80
+
+i2c:
+  sda: GPIO41
+  scl: GPIO40
+  id: bus_a
 
 uart:
   - id: uart_bus
@@ -68,127 +74,176 @@ button:
   - platform: LD2412
     factory_reset:
       name: "LD2412 Factory Reset"
+      id: ld2412_factory_reset_btn
     restart:
       name: "LD2412 Restart"
+      id: ld2412_restart_btn
     query_params:
       name: LD2412 Query params
+      id: ld2412_query_params_btn
   - platform: ld2450
     ld2450_id: ld2450_radar
     factory_reset:
       name: "LD2450 Factory Reset"
+      id: ld2450_factory_reset_btn
     restart:
       name: "LD2450 Restart"
+      id: ld2450_restart_btn
 
 number:
   - platform: ld2450
     ld2450_id: ld2450_radar
     presence_timeout:
       name: "LD2450 Timeout"
+      id: ld2450_timeout
     zone_1:
       x1:
         name: LD2450 Zone-1 X1
+        id: ld2450_zone1_x1
       y1:
         name: LD2450 Zone-1 Y1
+        id: ld2450_zone1_y1
       x2:
         name: LD2450 Zone-1 X2
+        id: ld2450_zone1_x2
       y2:
         name: LD2450 Zone-1 Y2
+        id: ld2450_zone1_y2
     zone_2:
       x1:
         name: LD2450 Zone-2 X1
+        id: ld2450_zone2_x1
       y1:
         name: LD2450 Zone-2 Y1
+        id: ld2450_zone2_y1
       x2:
         name: LD2450 Zone-2 X2
+        id: ld2450_zone2_x2
       y2:
         name: LD2450 Zone-2 Y2
+        id: ld2450_zone2_y2
     zone_3:
       x1:
         name: LD2450 Zone-3 X1
+        id: ld2450_zone3_x1
       y1:
         name: LD2450 Zone-3 Y1
+        id: ld2450_zone3_y1
       x2:
         name: LD2450 Zone-3 X2
+        id: ld2450_zone3_x2
       y2:
         name: LD2450 Zone-3 Y2
+        id: ld2450_zone3_y2
 
   - platform: LD2412
     timeout:
       name: "LD2412 Timeout"
+      id: ld2412_timeout
     min_distance_gate:
       name: "LD2412 min distance gate"
+      id: ld2412_min_distance_gate
     max_distance_gate:
       name: "LD2412 max distance gate"
+      id: ld2412_max_distance_gate
     g0:
       move_threshold:
         name: LD2412 g00 move threshold
+        id: ld2412_g00_move_threshold
       still_threshold:
         name: LD2412 g00 still threshold
+        id: ld2412_g00_still_threshold
     g1:
       move_threshold:
         name: LD2412 g01 move threshold
+        id: ld2412_g01_move_threshold
       still_threshold:
         name: LD2412 g01 still threshold
+        id: ld2412_g01_still_threshold
     g2:
       move_threshold:
         name: LD2412 g02 move threshold
+        id: ld2412_g02_move_threshold
       still_threshold:
         name: LD2412 g02 still threshold
+        id: ld2412_g02_still_threshold
     g3:
       move_threshold:
         name: LD2412 g03 move threshold
+        id: ld2412_g03_move_threshold
       still_threshold:
         name: LD2412 g03 still threshold
+        id: ld2412_g03_still_threshold
     g4:
       move_threshold:
         name: LD2412 g04 move threshold
+        id: ld2412_g04_move_threshold
       still_threshold:
         name: LD2412 g04 still threshold
+        id: ld2412_g04_still_threshold
     g5:
       move_threshold:
         name: LD2412 g05 move threshold
+        id: ld2412_g05_move_threshold
       still_threshold:
         name: LD2412 g05 still threshold
+        id: ld2412_g05_still_threshold
     g6:
       move_threshold:
         name: LD2412 g06 move threshold
+        id: ld2412_g06_move_threshold
       still_threshold:
         name: LD2412 g06 still threshold
+        id: ld2412_g06_still_threshold
     g7:
       move_threshold:
         name: LD2412 g07 move threshold
+        id: ld2412_g07_move_threshold
       still_threshold:
         name: LD2412 g07 still threshold
+        id: ld2412_g07_still_threshold
     g8:
       move_threshold:
         name: LD2412 g08 move threshold
+        id: ld2412_g08_move_threshold
       still_threshold:
         name: LD2412 g08 still threshold
+        id: ld2412_g08_still_threshold
     g9:
       move_threshold:
         name: LD2412 g09 move threshold
+        id: ld2412_g09_move_threshold
       still_threshold:
         name: LD2412 g09 still threshold
+        id: ld2412_g09_still_threshold
     g10:
       move_threshold:
         name: LD2412 g10 move threshold
+        id: ld2412_g10_move_threshold
       still_threshold:
         name: LD2412 g10 still threshold
+        id: ld2412_g10_still_threshold
     g11:
       move_threshold:
         name: LD2412 g11 move threshold
+        id: ld2412_g11_move_threshold
       still_threshold:
         name: LD2412 g11 still threshold
+        id: ld2412_g11_still_threshold
     g12:
       move_threshold:
         name: LD2412 g12 move threshold
+        id: ld2412_g12_move_threshold
       still_threshold:
         name: LD2412 g12 still threshold
+        id: ld2412_g12_still_threshold
     g13:
       move_threshold:
         name: LD2412 g13 move threshold
+        id: ld2412_g13_move_threshold
       still_threshold:
         name: LD2412 g13 still threshold
+        id: ld2412_g13_still_threshold
 
 binary_sensor:
   - platform: status
@@ -223,10 +278,13 @@ binary_sensor:
   - platform: LD2412
     has_target:
       name: LD2412 Presence
+      id: ld2412_presence
     has_moving_target:
       name: LD2412 Moving Target
+      id: ld2412_moving_target
     has_still_target:
       name: LD2412 Still Target
+      id: ld2412_still_target
 
 sensor:
   - platform: internal_temperature
@@ -239,6 +297,15 @@ sensor:
     id: sys_uptime
     update_interval: 60s
 
+  - platform: ltr390
+    id: ltr_390
+    light:
+      name: "LTR390 Light"
+      id: ltr390light
+    uv_index:
+      name: "LTR390 UV Index"
+      id: ltr390uvindex
+    update_interval: 60s
 
   - platform: ld2450
     ld2450_id: ld2450_radar
@@ -247,171 +314,237 @@ sensor:
       id: presence_target_count
     still_target_count:
       name: LD2450 Still Target Count
+      id: ld2450_still_target_count
     moving_target_count:
       name: LD2450 Moving Target Count
+      id: ld2450_moving_target_count
     target_1:
       x:
         name: LD2450 Target-1 X
+        id: ld2450_target1_x
       y:
         name: LD2450 Target-1 Y
+        id: ld2450_target1_y
       speed:
         name: LD2450 Target-1 Speed
+        id: ld2450_target1_speed
       angle:
         name: LD2450 Target-1 Angle
+        id: ld2450_target1_angle
       distance:
         name: LD2450 Target-1 Distance
+        id: ld2450_target1_distance
       resolution:
         name: LD2450 Target-1 Resolution
+        id: ld2450_target1_resolution
         disabled_by_default: true
     target_2:
       x:
         name: LD2450 Target-2 X
+        id: ld2450_target2_x
       y:
         name: LD2450 Target-2 Y
+        id: ld2450_target2_y
       speed:
         name: LD2450 Target-2 Speed
+        id: ld2450_target2_speed
       angle:
         name: LD2450 Target-2 Angle
+        id: ld2450_target2_angle
       distance:
         name: LD2450 Target-2 Distance
+        id: ld2450_target2_distance
       resolution:
         name: LD2450 Target-2 Resolution
+        id: ld2450_target2_resolution
         disabled_by_default: true
     target_3:
       x:
         name: LD2450 Target-3 X
+        id: ld2450_target3_x
       y:
         name: LD2450 Target-3 Y
+        id: ld2450_target3_y
       speed:
         name: LD2450 Target-3 Speed
+        id: ld2450_target3_speed
       angle:
         name: LD2450 Target-3 Angle
+        id: ld2450_target3_angle
       distance:
         name: LD2450 Target-3 Distance
+        id: ld2450_target3_distance
       resolution:
         name: LD2450 Target-3 Resolution
+        id: ld2450_target3_resolution
         disabled_by_default: true
     zone_1:
       target_count:
         name: LD2450 Zone-1 All Target Count
+        id: ld2450_zone1_target_count
       still_target_count:
         name: LD2450 Zone-1 Still Target Count
+        id: ld2450_zone1_still_target_count
       moving_target_count:
         name: LD2450 Zone-1 Moving Target Count
+        id: ld2450_zone1_moving_target_count
     zone_2:
       target_count:
         name: LD2450 Zone-2 All Target Count
+        id: ld2450_zone2_target_count
       still_target_count:
         name: LD2450 Zone-2 Still Target Count
+        id: ld2450_zone2_still_target_count
       moving_target_count:
         name: LD2450 Zone-2 Moving Target Count
+        id: ld2450_zone2_moving_target_count
     zone_3:
       target_count:
         name: LD2450 Zone-3 All Target Count
+        id: ld2450_zone3_target_count
       still_target_count:
         name: LD2450 Zone-3 Still Target Count
+        id: ld2450_zone3_still_target_count
       moving_target_count:
         name: LD2450 Zone-3 Moving Target Count
+        id: ld2450_zone3_moving_target_count
 
   - platform: LD2412
     light:
       name: LD2412 LUX
+      id: ld2412_lux
     moving_distance:
       name : LD2412 Moving Distance
+      id: ld2412_moving_distance
       disabled_by_default: true
     still_distance:
       name: LD2412 Still Distance
+      id: ld2412_still_distance
       disabled_by_default: true
     moving_energy:
       name: LD2412 Move Energy
+      id: ld2412_move_energy
       disabled_by_default: true
     still_energy:
       name: LD2412 Still Energy
+      id: ld2412_still_energy
       disabled_by_default: true
     detection_distance:
       name: LD2412 Detection Distance
+      id: ld2412_detection_distance
       disabled_by_default: true
     g0:
       move_energy:
         name: LD2412 g00 move energy
+        id: ld2412_g00_move_energy
       still_energy:
         name: LD2412 g00 still energy
+        id: ld2412_g00_still_energy
     g1:
       move_energy:
         name: LD2412 g01 move energy
+        id: ld2412_g01_move_energy
       still_energy:
         name: LD2412 g01 still energy
+        id: ld2412_g01_still_energy
     g2:
       move_energy:
         name: LD2412 g02 move energy
+        id: ld2412_g02_move_energy
       still_energy:
         name: LD2412 g02 still energy
+        id: ld2412_g02_still_energy
     g3:
       move_energy:
         name: LD2412 g03 move energy
+        id: ld2412_g03_move_energy
       still_energy:
         name: LD2412 g03 still energy
+        id: ld2412_g03_still_energy
     g4:
       move_energy:
         name: LD2412 g04 move energy
+        id: ld2412_g04_move_energy
       still_energy:
         name: LD2412 g04 still energy
+        id: ld2412_g04_still_energy
     g5:
       move_energy:
         name: LD2412 g05 move energy
+        id: ld2412_g05_move_energy
       still_energy:
         name: LD2412 g05 still energy
+        id: ld2412_g05_still_energy
     g6:
       move_energy:
         name: LD2412 g06 move energy
+        id: ld2412_g06_move_energy
       still_energy:
         name: LD2412 g06 still energy
+        id: ld2412_g06_still_energy
     g7:
       move_energy:
         name: LD2412 g07 move energy
+        id: ld2412_g07_move_energy
       still_energy:
         name: LD2412 g07 still energy
+        id: ld2412_g07_still_energy
     g8:
       move_energy:
         name: LD2412 g08 move energy
+        id: ld2412_g08_move_energy
       still_energy:
         name: LD2412 g08 still energy
+        id: ld2412_g08_still_energy
     g9:
       move_energy:
         name: LD2412 g09 move energy
+        id: ld2412_g09_move_energy
       still_energy:
         name: LD2412 g09 still energy
+        id: ld2412_g09_still_energy
     g10:
       move_energy:
         name: LD2412 g10 move energy
+        id: ld2412_g10_move_energy
       still_energy:
         name: LD2412 g10 still energy
+        id: ld2412_g10_still_energy
     g11:
       move_energy:
         name: LD2412 g11 move energy
+        id: ld2412_g11_move_energy
       still_energy:
         name: LD2412 g11 still energy
+        id: ld2412_g11_still_energy
     g12:
       move_energy:
         name: LD2412 g12 move energy
+        id: ld2412_g12_move_energy
       still_energy:
         name: LD2412 g12 still energy
+        id: ld2412_g12_still_energy
     g13:
       move_energy:
         name: LD2412 g13 move energy
+        id: ld2412_g13_move_energy
       still_energy:
         name: LD2412 g13 still energy
+        id: ld2412_g13_still_energy
 
 select:
   - platform: LD2412
     out_pin_level:
       name: 'LD2412 Hardware output pin level'
+      id: ld2412_out_pin_level
       disabled_by_default: true
     distance_resolution:
       name: 'LD2412 Distance resolution'
+      id: ld2412_distance_resolution
       disabled_by_default: true
     baud_rate:
       name: "LD2412 baud rate"
+      id: ld2412_baud_rate
       disabled_by_default: true
       on_value:
         - delay: 3s
@@ -425,13 +558,16 @@ select:
             }
     mode:
       name: "LD2412 Mode"
+      id: ld2412_mode
   - platform: ld2450
     ld2450_id: ld2450_radar
     baud_rate:
       name: "LD2450 Baud rate"
+      id: ld2450_baud_rate
       disabled_by_default: true
     zone_type:
       name: "LD2450 Zone Type"
+      id: ld2450_zone_type
 
 switch:
   - platform: factory_reset
@@ -441,12 +577,15 @@ switch:
     ld2450_id: ld2450_radar
     bluetooth:
       name: "LD2450 Bluetooth"
+      id: ld2450_bluetooth
     multi_target:
       name: "LD2450 Multi Target Tracking"
+      id: ld2450_multi_target
       disabled_by_default: true
   - platform: LD2412
     bluetooth:
       name: "LD2412 Bluetooth"
+      id: ld2412_bluetooth
   - platform: template
     name: "Reduce DB Reporting"
     id: reduce_db_reporting
@@ -460,22 +599,29 @@ text_sensor:
     ld2450_id: ld2450_radar
     version:
       name: "LD2450 Firmware"
+      id: ld2450_firmware
     mac_address:
       name: "LD2450 BT MAC"
+      id: ld2450_bt_mac
     target_1:
       direction:
         name: "LD2450 Target-1 Direction"
+        id: ld2450_target1_direction
     target_2:
       direction:
         name: "LD2450 Target-2 Direction"
+        id: ld2450_target2_direction
     target_3:
       direction:
         name: "LD2450 Target-3 Direction"
+        id: ld2450_target3_direction
   - platform: LD2412
     version:
       name: "LD2412 Firmware"
+      id: ld2412_firmware
     mac_address:
       name: "LD2412 BT MAC"
+      id: ld2412_bt_mac
 
 
 light:
