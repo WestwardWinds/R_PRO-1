@@ -21,6 +21,15 @@ api:
       then:
         - rtttl.play:
             rtttl: !lambda 'return song_str;'
+
+    #Co2 Calibration Service
+    - service: calibrate_co2_value
+      variables:
+        co2_ppm: float
+      then:
+        - scd4x.perform_forced_calibration:
+            value: !lambda 'return co2_ppm;'
+            id: scd40
 rtttl:
  id: rtttl_player
  output: buzzer
@@ -89,6 +98,14 @@ button:
     restart:
       name: "LD2450 Restart"
       id: ld2450_restart_btn
+  - platform: template
+    name: "Calibrate SCD40 To 420ppm"
+    id: set_SCD40_calibrate
+    on_press:
+      - scd4x.perform_forced_calibration:
+          value: 420
+          id: scd40
+    disabled_by_default: true
 
 number:
   - platform: ld2450
@@ -135,6 +152,35 @@ number:
       y2:
         name: LD2450 Zone-3 Y2
         id: ld2450_zone3_y2
+
+  - platform: template
+    name: SCD40 Temperature Offset
+    id: scd40_temperature_offset
+    restore_value: true
+    initial_value: 18.86
+    min_value: -70.0
+    max_value: 70.0
+    entity_category: "CONFIG"
+    unit_of_measurement: "°C"
+    optimistic: true
+    update_interval: never
+    step: 0.1
+    mode: box
+    disabled_by_default: true
+  - platform: template
+    name: SCD40 Humidity Offset
+    id: scd40_humidity_offset
+    restore_value: true
+    initial_value: 0
+    min_value: -70.0
+    max_value: 70.0
+    entity_category: "CONFIG"
+    unit_of_measurement: "%"
+    optimistic: true
+    update_interval: never
+    step: 0.1
+    mode: box
+    disabled_by_default: true
 
   - platform: LD2412
     timeout:
@@ -296,6 +342,29 @@ sensor:
     name: Uptime
     id: sys_uptime
     update_interval: 60s
+  
+  - platform: scd4x
+    id: scd40
+    co2:
+      name: "CO2"
+      id: "co2"
+      disabled_by_default: true
+    temperature:
+      name: "SCD40 Temperature"
+      id: scd40_temperature
+      disabled_by_default: true
+      filters:
+        - lambda: return x - id(scd40_temperature_offset).state;
+    humidity:
+      name: "SCD40 Humidity"
+      id: scd40_humidity
+      disabled_by_default: true
+      filters:
+        - lambda: return x - id(scd40_humidity_offset).state;  
+    automatic_self_calibration: false
+    update_interval: 60s
+    measurement_mode: "periodic"
+    i2c_id: bus_a
 
   - platform: ltr390
     id: ltr_390
@@ -410,9 +479,6 @@ sensor:
         id: ld2450_zone3_moving_target_count
 
   - platform: LD2412
-    light:
-      name: LD2412 LUX
-      id: ld2412_lux
     moving_distance:
       name : LD2412 Moving Distance
       id: ld2412_moving_distance
