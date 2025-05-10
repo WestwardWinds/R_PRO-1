@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   label-check:
-    uses: https://github.com/ApolloAutomation/Workflows/.github/workflows/label-check.yml@main
+    uses: ApolloAutomation/Workflows/.github/workflows/label-check.yml@main
   ci:
     needs: [ label-check ]
     strategy:
@@ -29,7 +29,7 @@ jobs:
           - stable
           - beta
           - dev
-    uses: https://github.com/ApolloAutomation/Workflows/.github/workflows/build.yml@main
+    uses: ApolloAutomation/Workflows/.github/workflows/build.yml@main
     with:
       file: ${{ matrix.file }}
       esphome-version: ${{ matrix.esphome-version }}

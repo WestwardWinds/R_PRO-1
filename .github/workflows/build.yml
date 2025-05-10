@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   publish:
-    uses: https://github.com/ApolloAutomation/Workflows/.github/workflows/publish.yml@main
+    uses: ApolloAutomation/Workflows/.github/workflows/publish.yml@main
     with:
       core_yaml_path: Integrations/ESPHome/Core.yaml
       firmwares_json: '[{"yaml": "Integrations/ESPHome/R_PRO-1_ETH.yaml", "name": "firmware-e"}, {"yaml": "Integrations/ESPHome/R_PRO-1_W.yaml", "name": "firmware-w"}]'
