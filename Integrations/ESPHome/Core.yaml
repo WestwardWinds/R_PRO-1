@@ -80,6 +80,9 @@ ld2450:
   throttle: 500ms
 
 button:
+  - platform: restart
+    icon: mdi:power-cycle
+    name: "ESP Reboot"
   - platform: LD2412
     factory_reset:
       name: "LD2412 Factory Reset"
