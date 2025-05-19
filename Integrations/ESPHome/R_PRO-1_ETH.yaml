@@ -45,6 +45,31 @@ ethernet:
   interrupt_pin: GPIO13
   reset_pin: GPIO14
 
+select:
+  - platform: template
+    id: firmware_selector
+    name: Firmware Type
+    icon: "mdi:test-tube"
+    entity_category: config
+    optimistic: true
+    restore_value: true
+    options:
+      - "WiFi"
+      - "Ethernet"
+    initial_option: "Ethernet"
+    on_value:
+      then:
+        - if:
+            condition:
+              lambda: 'return id(firmware_selector).state == "Ethernet";'
+            then:
+              - logger.log: "OTA updates set to use ethernet firmware"
+              - lambda: id(update_http_request).set_source_url("https://apolloautomation.github.io/R_PRO-1/firmware-e/manifest.json");
+              - component.update: update_http_request
+            else:
+              - logger.log: "OTA updates set to use wifi firmware"
+              - lambda: id(update_http_request).set_source_url("https://apolloautomation.github.io/R_PRO-1/firmware-w/manifest.json");
+              - component.update: update_http_request
 
 packages:
   core: !include Core.yaml
