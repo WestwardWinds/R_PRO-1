@@ -23,7 +23,7 @@ jobs:
       yaml_changed: ${{ steps.check.outputs.yaml_changed }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 2  # So we can diff the previous commit
 
@@ -59,7 +59,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Read version from YAML file
         id: read_version
@@ -160,7 +160,7 @@ jobs:
       id-token: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # 1) Download Firmware
       - uses: actions/download-artifact@v4
