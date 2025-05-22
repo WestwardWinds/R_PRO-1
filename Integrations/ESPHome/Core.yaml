@@ -1,5 +1,5 @@
 substitutions:
-  version: "25.5.22.1"
+  version: "25.5.22.2"
 
 esp32:
   board: esp32-s3-devkitc-1
@@ -110,6 +110,15 @@ button:
           value: 420
           id: scd40
     disabled_by_default: true
+
+  - platform: template
+    name: "Update Firmware"
+    id: update_firmware
+    entity_category: config
+    on_press:
+      then:
+        - lambda: |-
+            id(update_http_request).perform(true);
 
 number:
   - platform: ld2450
