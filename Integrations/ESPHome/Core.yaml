@@ -1,5 +1,5 @@
 substitutions:
-  version: "25.5.22.2"
+  version: "25.5.22.3"
 
 esp32:
   board: esp32-s3-devkitc-1
@@ -112,7 +112,7 @@ button:
     disabled_by_default: true
 
   - platform: template
-    name: "Update Firmware"
+    name: "Firmware Update"
     id: update_firmware
     entity_category: config
     on_press:
