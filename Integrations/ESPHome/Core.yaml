@@ -1,9 +1,10 @@
 substitutions:
-  version: "25.5.22.3"
+  version: "25.6.1.1"
 
 esp32:
   board: esp32-s3-devkitc-1
   variant: esp32s3
+  flash_size: 8MB
   framework:
     type: esp-idf
 
@@ -651,7 +652,7 @@ select:
 switch:
   - platform: factory_reset
     id: factory_reset_switch
-    internal: true
+    disabled_by_default: true
   - platform: ld2450
     ld2450_id: ld2450_radar
     bluetooth:
@@ -665,7 +666,7 @@ switch:
     bluetooth:
       name: "LD2412 Bluetooth"
       id: ld2412_bluetooth
-  - platform: template
+  - platform: template #TODO: Needs implemented
     name: "Reduce DB Reporting"
     id: reduce_db_reporting
     icon: mdi:database
@@ -679,9 +680,11 @@ text_sensor:
     version:
       name: "LD2450 Firmware"
       id: ld2450_firmware
+      disabled_by_default: true
     mac_address:
       name: "LD2450 BT MAC"
       id: ld2450_bt_mac
+      disabled_by_default: true
     target_1:
       direction:
         name: "LD2450 Target-1 Direction"
@@ -698,9 +701,11 @@ text_sensor:
     version:
       name: "LD2412 Firmware"
       id: ld2412_firmware
+      disabled_by_default: true
     mac_address:
       name: "LD2412 BT MAC"
       id: ld2412_bt_mac
+      disabled_by_default: true
 
 
 light:
