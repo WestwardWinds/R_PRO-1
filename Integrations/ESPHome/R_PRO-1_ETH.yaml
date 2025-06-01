@@ -9,7 +9,7 @@ esphome:
 
   project:
     name: "ApolloAutomation.R-PRO-1-ETH"
-    version: "25.3.27"
+    version: ${version}
 
   min_version: 2024.6.4
   
