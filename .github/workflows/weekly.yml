@@ -13,16 +13,25 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        file:
-          - Integrations/ESPHome/R_PRO-1_W.yaml
-          - Integrations/ESPHome/R_PRO-1_ETH.yaml
+        include:
+          - device-name: r-pro-1-eth
+            yaml-file: Integrations/ESPHome/R_PRO-1_ETH.yaml
+          - device-name: r-pro-1-w
+            yaml-file: Integrations/ESPHome/R_PRO-1_W.yaml
         esphome-version:
           - stable
           - beta
           - dev
     uses: ApolloAutomation/Workflows/.github/workflows/build.yml@main
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+      pull-requests: write
     with:
-      file: ${{ matrix.file }}
+      device-name: ${{ matrix.device-name }}
+      yaml-files: ${{ matrix.yaml-file }}
+      core-yaml-path: Integrations/ESPHome/Core.yaml
       esphome-version: ${{ matrix.esphome-version }}
 
   notify:
