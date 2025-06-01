@@ -3,47 +3,27 @@ name: CI
 on:
   pull_request:
 
-permissions:
-  # Allow GITHUB_TOKEN to add labels to pull requests
-  pull-requests: write
-  issues: write
-  contents: read
-  id-token: write
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
-  cancel-in-progress: true
-
 jobs:
   label-check:
+    name: Label Check
     uses: ApolloAutomation/Workflows/.github/workflows/label-check.yml@main
-    permissions:
-      contents: write
-      pages: write
-      id-token: write
-      pull-requests: write
+    
   ci:
-    needs: [ label-check ]
+    name: Building ${{ matrix.file }}
+    runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
       matrix:
-        include:
-          - device-name: r-pro-1-eth
-            yaml-file: Integrations/ESPHome/R_PRO-1_ETH.yaml
-          - device-name: r-pro-1-w
-            yaml-file: Integrations/ESPHome/R_PRO-1_W.yaml
+        file:
+          - Integrations/ESPHome/R_PRO-1_ETH.yaml
+          - Integrations/ESPHome/R_PRO-1_W.yaml
         esphome-version:
           - stable
           - beta
           - dev
-    uses: ApolloAutomation/Workflows/.github/workflows/build.yml@main
-    permissions:
-      contents: write
-      pages: write
-      id-token: write
-      pull-requests: write
-    with:
-      device-name: ${{ matrix.device-name }}
-      yaml-files: ${{ matrix.yaml-file }}
-      core-yaml-path: Integrations/ESPHome/Core.yaml
-      esphome-version: ${{ matrix.esphome-version }}
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4.1.7
+      - name: Build ESPHome firmware to verify configuration
+        uses: esphome/build-action@v6
+        with:
+          yaml-file: ${{ matrix.file }}

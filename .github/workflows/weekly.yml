@@ -4,46 +4,23 @@ on:
   schedule:
     - cron: '0 0 * * 1'
 
-permissions:
-  contents: read
-  id-token: write
-
 jobs:
-  ci:
+  build:
+    name: Building ${{ matrix.file }}
+    runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
       matrix:
-        include:
-          - device-name: r-pro-1-eth
-            yaml-file: Integrations/ESPHome/R_PRO-1_ETH.yaml
-          - device-name: r-pro-1-w
-            yaml-file: Integrations/ESPHome/R_PRO-1_W.yaml
+        file:
+          - Integrations/ESPHome/R_PRO-1_ETH.yaml
+          - Integrations/ESPHome/R_PRO-1_W.yaml
         esphome-version:
           - stable
           - beta
           - dev
-    uses: ApolloAutomation/Workflows/.github/workflows/build.yml@main
-    permissions:
-      contents: write
-      pages: write
-      id-token: write
-      pull-requests: write
-    with:
-      device-name: ${{ matrix.device-name }}
-      yaml-files: ${{ matrix.yaml-file }}
-      core-yaml-path: Integrations/ESPHome/Core.yaml
-      esphome-version: ${{ matrix.esphome-version }}
-
-  notify:
-    name: Notify on Failure
-    needs: [ ci ]
-    if: failure()
-    runs-on: ubuntu-latest
     steps:
-      - name: Send Discord notification
-        uses: sarisia/actions-status-discord@v1
+      - name: Checkout source code
+        uses: actions/checkout@v4.1.7
+      - name: Build ESPHome firmware to verify configuration
+        uses: esphome/build-action@v6
         with:
-          webhook: ${{ secrets.DISCORD_WEBHOOK }}
-          status: ${{ needs.ci.result }}
-          title: Build Failed - ESPHome Firmware
-          description: One or more ESPHome firmware builds failed. Check the logs for details.
+          yaml-file: ${{ matrix.file }}
