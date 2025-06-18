@@ -61,18 +61,11 @@ globals:
     type: bool
     initial_value: "false"
 
+captive_portal:
+
 rtttl:
  id: rtttl_player
  output: buzzer
-globals:
-  - id: cycleCounter
-    type: int
-    restore_value: no
-    initial_value: '0'
-  - id: button_press_timestamp
-    restore_value: no
-    type: uint32_t
-    initial_value: '0'
 
 web_server:  
   port: 80
