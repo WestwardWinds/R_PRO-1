@@ -31,6 +31,36 @@ api:
         - scd4x.perform_forced_calibration:
             value: !lambda 'return co2_ppm;'
             id: scd40
+globals:
+  - id: cycleCounter
+    type: int
+    restore_value: no
+    initial_value: '0'
+  - id: button_press_timestamp
+    restore_value: no
+    type: uint32_t
+    initial_value: '0'
+  - id: runTest
+    restore_value: yes
+    type: bool
+    initial_value: "true"
+  - id: testCycleCount
+    type: int
+    restore_value: no
+    initial_value: "0"
+  - id: aht20
+    restore_value: no
+    type: bool
+    initial_value: "false"
+  - id: ltr390lightPassed
+    restore_value: no
+    type: bool
+    initial_value: "false"
+  - id: ltr390uvindexPassed
+    restore_value: no
+    type: bool
+    initial_value: "false"
+
 rtttl:
  id: rtttl_player
  output: buzzer
@@ -707,7 +737,6 @@ text_sensor:
       id: ld2412_bt_mac
       disabled_by_default: true
 
-
 light:
   - platform: esp32_rmt_led_strip
     id: rgb_light
@@ -730,3 +759,125 @@ light:
           update_interval: 100ms
           min_brightness: 50%
           max_brightness: 100%
+
+script:
+  - id: statusCheck
+    then:
+      - if:
+          condition:
+            - lambda: 'return id(ink_ha_connected).state;'
+          then:
+            - logger.log: "Apollo Automation: Connected To HA"
+            - light.turn_on: 
+                id: rgb_light
+                brightness: 100%
+                red: 0%
+                green: 0%
+                blue: 100%
+          else:
+            - if:
+                condition:
+                  - wifi.connected
+                then:
+                  - logger.log: "Apollo Automation: Connected To Wifi"
+                  - light.turn_on: 
+                      id: rgb_light
+                      brightness: 100%
+                      red: 0%
+                      green: 100%
+                      blue: 0%
+                else:
+                  - logger.log: "Apollo Automation: Not Connected To Wifi"
+                  - light.turn_on: 
+                      id: rgb_light
+                      brightness: 100%
+                      red: 100%
+                      green: 100%
+                      blue: 0%
+      - delay: 5s
+      - light.turn_off: rgb_light
+  
+  - id: testScript
+    then:
+      if: 
+        condition:
+          - lambda: "return id(runTest) == true;"
+        then:
+          - lambda: "id(runTest) = false;"
+          - lambda: "id(testCycleCount) = 0;"
+          - while:
+              condition:
+                - lambda: "return id(testCycleCount) < 5;"
+              then:
+                - if:
+                    condition:
+                      - lambda: "return id(ltr390lightPassed) == false;"
+                    then:
+                      - if:
+                          condition:
+                            - lambda: "return id(ltr390light).state > 10;"
+                          then:
+                            - lambda: "id(ltr390lightPassed) = true;"
+                - if:
+                    condition:
+                      - lambda: "return id(ltr390uvindexPassed) == false;"
+                    then:
+                      - if:
+                          condition:
+                            - lambda: "return !isnan(id(ltr390uvindex).state);"
+                          then:
+                            - lambda: "id(ltr390uvindexPassed) = true;"
+                - if:
+                    condition:
+                      - lambda: "return id(aht20) == false;"
+                    then:
+                      - if:
+                          condition:
+                            - lambda: "return id(aht_temperature).state > 15;"
+                          then:
+                            - lambda: "id(aht20) = true;"
+
+                - if:
+                    condition:
+                      - lambda: "return id(aht20) && id(ltr390lightPassed) && id(ltr390uvindexPassed);"
+                    then:
+                      - lambda: "id(testCycleCount) = 10;"
+                - lambda: "id(runTest) = false;"
+                - delay: 1s
+                - lambda: "id(testCycleCount) += 1;"
+
+          #Check If Test Passed To Trigger Lights
+          - if:
+              condition:
+                - lambda: "return id(aht20) && id(ltr390lightPassed) && id(ltr390uvindexPassed);"
+              then:
+                - lambda: "id(runTest) = false;"
+                - light.turn_on:
+                    id: rgb_light
+                    red: 0%
+                    green: 100%
+                    blue: 0%
+                - delay: 5s
+                - light.turn_on:
+                    id: rgb_light
+                    red: 0%
+                    green: 0%
+                    blue: 0%
+                - light.turn_off:
+                    id: rgb_light
+                
+              else:
+                - lambda: "id(runTest) = false;"
+                - light.turn_on:
+                    id: rgb_light
+                    red: 100%
+                    green: 0%
+                    blue: 0%
+                - delay: 5s
+                - light.turn_on:
+                    id: rgb_light
+                    red: 0%
+                    green: 0%
+                    blue: 0%
+                - light.turn_off:
+                    id: rgb_light
