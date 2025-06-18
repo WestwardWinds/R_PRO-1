@@ -48,10 +48,6 @@ globals:
     type: int
     restore_value: no
     initial_value: "0"
-  - id: aht20
-    restore_value: no
-    type: bool
-    initial_value: "false"
   - id: ltr390lightPassed
     restore_value: no
     type: bool
@@ -822,17 +818,7 @@ script:
                             - lambda: "id(ltr390uvindexPassed) = true;"
                 - if:
                     condition:
-                      - lambda: "return id(aht20) == false;"
-                    then:
-                      - if:
-                          condition:
-                            - lambda: "return id(aht_temperature).state > 15;"
-                          then:
-                            - lambda: "id(aht20) = true;"
-
-                - if:
-                    condition:
-                      - lambda: "return id(aht20) && id(ltr390lightPassed) && id(ltr390uvindexPassed);"
+                      - lambda: "return id(ltr390lightPassed) && id(ltr390uvindexPassed);"
                     then:
                       - lambda: "id(testCycleCount) = 10;"
                 - lambda: "id(runTest) = false;"
@@ -842,7 +828,7 @@ script:
           #Check If Test Passed To Trigger Lights
           - if:
               condition:
-                - lambda: "return id(aht20) && id(ltr390lightPassed) && id(ltr390uvindexPassed);"
+                - lambda: "return id(ltr390lightPassed) && id(ltr390uvindexPassed);"
               then:
                 - lambda: "id(runTest) = false;"
                 - light.turn_on:
