@@ -350,9 +350,12 @@ binary_sensor:
               id(factory_reset_switch).turn_on();
             }
             else if (millis() - id(button_press_timestamp) >= 1000) {
-              //id(testCycleCount) = 0;
-              //id(runTest) = true;
-              //id(testScript).execute();
+              // StatusCheck
+              id(statusCheck).execute();
+              delay(3000);
+              id(testCycleCount) = 0;
+              id(runTest) = true;
+              id(testScript).execute();
             }
   - platform: LD2412
     has_target:
