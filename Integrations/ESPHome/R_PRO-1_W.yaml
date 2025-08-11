@@ -12,6 +12,15 @@ esphome:
     version: ${version}
 
   min_version: 2024.6.4
+
+  on_boot:
+  - priority: -10
+    then:
+      - if:
+          condition:
+            - lambda: "return id(runTest);"
+          then:
+            - lambda: "id(testScript).execute();"
   
 dashboard_import:
   package_import_url: github://ApolloAutomation/R-1/Integrations/ESPHome/R_PRO-1_W.yaml
