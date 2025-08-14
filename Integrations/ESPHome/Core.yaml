@@ -1,5 +1,5 @@
 substitutions:
-  version: "25.7.8.1"
+  version: "25.8.12.1"
 
 esp32:
   board: esp32-s3-devkitc-1
@@ -7,10 +7,6 @@ esp32:
   flash_size: 8MB
   framework:
     type: esp-idf
-
-external_components:
-  - source: github://pr#9075
-    components: [ld2412]
 
 api:
   services:
@@ -89,12 +85,10 @@ output:
 ld2412:
   id: ld2412_radar
   uart_id: uart_ld2412
-  throttle: 500ms
 
 ld2450:
   id: ld2450_radar
   uart_id: uart_ld2450
-  throttle: 500ms
 
 button:
   - platform: restart
