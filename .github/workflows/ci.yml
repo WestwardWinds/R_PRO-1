@@ -21,8 +21,8 @@ jobs:
     strategy:
       matrix:
         file:
-          - Integrations/ESPHome/R_PRO-1_ETH.yaml
-          - Integrations/ESPHome/R_PRO-1_W.yaml
+          - Integrations/ESPHome/RPRO-1_ETH.yaml
+          - Integrations/ESPHome/RPRO-1_W.yaml
         esphome-version:
           - stable
           - beta
