@@ -23,7 +23,7 @@ esphome:
             - lambda: "id(testScript).execute();"
   
 dashboard_import:
-  package_import_url: github://ApolloAutomation/R_PRO-1/Integrations/ESPHome/R_PRO-1_W.yaml
+  package_import_url: github://ApolloAutomation/R_PRO-1/Integrations/ESPHome/RPRO-1_W.yaml
   import_full_config: false
 
 ota:
