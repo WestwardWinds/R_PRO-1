@@ -23,11 +23,11 @@ jobs:
       id-token: write
       pull-requests: write
     with:
-      device-name: r-pro-1
+      device-name: r_pro-1
       yaml-files: |
         Integrations/ESPHome/R_PRO-1_ETH.yaml
         Integrations/ESPHome/R_PRO-1_W.yaml
-      firmware-names: "_ETH:firmware-e,_W:firmware-w"
+      firmware-names: "1_ETH:firmware-e,1_W:firmware-w"
       core-yaml-path: Integrations/ESPHome/Core.yaml
       esphome-version: stable
       # Bypass check if manually triggered with bypass option

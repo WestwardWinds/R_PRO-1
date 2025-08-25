@@ -13,6 +13,7 @@ esphome:
 
   min_version: 2024.6.4
   on_boot:
+
     - priority: 800
       then:
         - if:

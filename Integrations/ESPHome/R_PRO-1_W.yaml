@@ -12,6 +12,7 @@ esphome:
     version: ${version}
 
   min_version: 2024.6.4
+
   on_boot:
     - priority: 800
       then:
@@ -30,7 +31,7 @@ esphome:
             }
   
 dashboard_import:
-  package_import_url: github://ApolloAutomation/R-1/Integrations/ESPHome/R_PRO-1_W.yaml
+  package_import_url: github://ApolloAutomation/R_PRO-1/Integrations/ESPHome/R_PRO-1_W.yaml
   import_full_config: false
 
 ota:
