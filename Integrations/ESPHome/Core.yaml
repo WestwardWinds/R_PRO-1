@@ -451,11 +451,21 @@ sensor:
         id: ld2450_target1_x
         filters:
           - throttle: 500ms
+          - lambda: |-
+              if (id(ld2450_target1_direction).state == "NA") {
+                return NAN;
+              }
+              return x;
       y:
         name: LD2450 Target-1 Y
         id: ld2450_target1_y
         filters:
           - throttle: 500ms
+          - lambda: |-
+              if (id(ld2450_target1_direction).state == "NA") {
+                return NAN;
+              }
+              return x;          
       speed:
         name: LD2450 Target-1 Speed
         id: ld2450_target1_speed
