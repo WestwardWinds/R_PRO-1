@@ -481,6 +481,11 @@ sensor:
         id: ld2450_target1_distance
         filters:
           - throttle: 500ms
+          - lambda: |-
+              if (id(ld2450_target1_direction).state == "NA") {
+                return NAN;
+              }
+              return x;            
       resolution:
         name: LD2450 Target-1 Resolution
         id: ld2450_target1_resolution
@@ -493,11 +498,21 @@ sensor:
         id: ld2450_target2_x
         filters:
           - throttle: 500ms
+          - lambda: |-
+              if (id(ld2450_target2_direction).state == "NA") {
+                return NAN;
+              }
+              return x;            
       y:
         name: LD2450 Target-2 Y
         id: ld2450_target2_y
         filters:
           - throttle: 500ms
+          - lambda: |-
+              if (id(ld2450_target2_direction).state == "NA") {
+                return NAN;
+              }
+              return x;            
       speed:
         name: LD2450 Target-2 Speed
         id: ld2450_target2_speed
@@ -513,6 +528,11 @@ sensor:
         id: ld2450_target2_distance
         filters:
           - throttle: 500ms
+          - lambda: |-
+              if (id(ld2450_target2_direction).state == "NA") {
+                return NAN;
+              }
+              return x;            
       resolution:
         name: LD2450 Target-2 Resolution
         id: ld2450_target2_resolution
