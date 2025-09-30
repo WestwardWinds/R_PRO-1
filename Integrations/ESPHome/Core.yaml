@@ -456,6 +456,7 @@ sensor:
               }
               return x;
           - throttle: 500ms
+          - delta: 5%
       y:
         name: LD2450 Target-1 Y
         id: ld2450_target1_y
@@ -466,6 +467,7 @@ sensor:
               }
               return x;
           - throttle: 500ms
+          - delta: 5%
       speed:
         name: LD2450 Target-1 Speed
         id: ld2450_target1_speed
@@ -503,6 +505,7 @@ sensor:
               }
               return x;
           - throttle: 500ms
+          - delta: 5%
       y:
         name: LD2450 Target-2 Y
         id: ld2450_target2_y
@@ -513,6 +516,7 @@ sensor:
               }
               return x;
           - throttle: 500ms
+          - delta: 5%
       speed:
         name: LD2450 Target-2 Speed
         id: ld2450_target2_speed
@@ -544,12 +548,24 @@ sensor:
         name: LD2450 Target-3 X
         id: ld2450_target3_x
         filters:
+          - lambda: |-
+              if (id(ld2450_target3_direction).state == "NA") {
+                return NAN;
+              }
+              return x;
           - throttle: 500ms
+          - delta: 5%
       y:
         name: LD2450 Target-3 Y
         id: ld2450_target3_y
         filters:
+          - lambda: |-
+              if (id(ld2450_target3_direction).state == "NA") {
+                return NAN;
+              }
+              return x;
           - throttle: 500ms
+          - delta: 5%
       speed:
         name: LD2450 Target-3 Speed
         id: ld2450_target3_speed
@@ -564,6 +580,11 @@ sensor:
         name: LD2450 Target-3 Distance
         id: ld2450_target3_distance
         filters:
+          - lambda: |-
+              if (id(ld2450_target3_direction).state == "NA") {
+                return NAN;
+              }
+              return x;
           - throttle: 500ms
       resolution:
         name: LD2450 Target-3 Resolution
